@@ -4,7 +4,7 @@ def generate_timetable(Q, work_concentration,num_actions,num_time_slots):
 
     # Find peak concentration hour for each task
     peak_concentration_hours = {0: np.argmax(work_concentration)}
-
+    print(f"Peak productivity times: {peak_concentration_hours}")
     for action in range(1, num_actions):
         # Find peak concentration hour for current action
         peak_concentration_hours[action] = np.argmax(Q[:, action])

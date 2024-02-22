@@ -35,7 +35,7 @@ def fetchOutput(idValue, columnName, multipleSubjects):
              fetchedOutput=db_cursor.fetchone()
              elapsedTime+=fetchedOutput[0]
         return elapsedTime
-# updateValue(1,"LR",3)
+#updateValue(1,"LR",3)
 # def storeOutput(subjectName, columnName, value):
 #     columnList=["MondayTimings","TuesdayTimings","WednesdayTimings","ThursdayTimings","FridayTimings","SaturdayTimings","SundayTimings"]
 #     if columnName not in columnList:
