@@ -1,5 +1,6 @@
 import numpy as np
 from routine import generate_timetable
+from connectorr import updateValue
 num_time_slots = 48
 num_actions = 3
 num_episodes = 10
@@ -9,6 +10,8 @@ ep = 0.2
 
 Q = np.zeros((num_time_slots, num_actions))
 work_concentration = np.zeros(num_time_slots)
+print("work concentration")
+print(work_concentration)
 
 user_feedback = [(0, 'work', 1), (1, 'work', 1), (2, 'work', 2),
                   (3, 'break', 1), (4, 'sleep', 2), (5, 'work', 3),
@@ -69,8 +72,9 @@ for episode in range(num_episodes):
 
 peak_time = np.argmax(work_concentration)
 tt=generate_timetable(Q, work_concentration,num_actions,num_time_slots)
+updateValue("Qvalue",Q,"column",2)
+print(Q)
 print("Daily Timetable:")
 for slot, task in tt.items():
     print(f"{slot}: {task}")
 print(f"Peak productivity time: {peak_time}")
-#total elapsed time ber korte hobe
