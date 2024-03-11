@@ -50,14 +50,15 @@ def fetchOutput(mode,idValue, columnName, multipleSubjects):
     elif mode=='Qvalue':
         query = "SELECT value1, value2, value3 FROM Qtable"
         db_cursor.execute(query)
-        rows = db_cursor.fetchone()
-        numeric_row = [[float(value) for value in row] for row in rows]  # Convert each value to float
-        numpy_array = np.array([numeric_row])
+        rows = db_cursor.fetchall()
+        # numeric_row = [float(value) for value in row]  # Convert each value to float
+        numeric_rows = [[float(value) for value in row] for row in rows] 
+        numpy_array = np.array(numeric_rows)
         print(numpy_array)
 
 # Fetch the row
 
-# fetchOutput('Qvalue',None,None,None)
+#fetchOutput('notQvalue',None,None,None)
 # Close the cursor and connection
 
 # Convert the row into a numpy array

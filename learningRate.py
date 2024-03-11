@@ -1,12 +1,13 @@
 import pandas as pd
 from connectorr import fetchOutput
 from connectorr import updateValue
+
 def learningRate(subject_id,obtained_marks,cutoff_marks,total_marks,first_exam,exam_flag): 
-    current_lr= fetchOutput(subject_id, 'LR', False)
+    current_lr= fetchOutput('notQvalue',subject_id, 'LR', False)
     print(current_lr)
-    sub_avgTime=fetchOutput(subject_id, 'AvgTime', False)
+    sub_avgTime=fetchOutput('notQvalue',subject_id, 'AvgTime', False)
     print(sub_avgTime)
-    sub_elapsedTime=fetchOutput(subject_id,'abc', True)
+    sub_elapsedTime=fetchOutput('notQvalue',subject_id,'abc', True)
     # Total_learning_Time=0.0
     Total_learning_Time=0.0
     if not exam_flag:                                           #jodi student exam na diye thake, tokhon jodi ei function ta call hoye tahole 'if' block ta call hobe, karon exam neoa hoye ni mane holo oke porte bola hocche, tar manei okei time recommend kora hocche 
@@ -28,16 +29,16 @@ def learningRate(subject_id,obtained_marks,cutoff_marks,total_marks,first_exam,e
                 lr=(currentLearningTime-0.5)/sub_avgTime                  #karon ami protibar bhalo number pele 1/2 hour kore komate chai
                 current_lr=lr  
                 print("after First attempt success, learning rate is "+ str(current_lr))#update korchi learning rate ta
-            updateValue(current_lr,"LR",subject_id)   
+            updateValue('notQvalue',current_lr,"LR",subject_id)   
              
         else:
         #forced_exam?
             Total_learning_Time=sub_avgTime-((obtained_marks/total_marks)*sub_avgTime)#jodi marks baaje paye oke aro porte bolbo subject ta based on the amount of marks
             
             print("this is the additional learning time "+str(Total_learning_Time))
-    updateValue(Total_learning_Time,"TotalTiming",subject_id)
+    updateValue('notQvalue',Total_learning_Time,"TotalTiming",subject_id)
 
-learningRate(3,35,45,100,False,True)
+learningRate(3,50,45,100,False,True)
 
 import datetime
 def dayName():
