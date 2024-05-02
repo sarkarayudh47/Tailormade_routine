@@ -72,6 +72,8 @@ def fitness_function(population,TimeSum,hday_list):
                     # print(f"since current value is {current_value} and hday is {current_hday} score gets decremented by 1 due to 3rd condition")
         
         score=score*multiplier
+        if score<0:
+            score=0
         score_multiplier[index] = [member, score]
         print("abc")
     return score_multiplier
@@ -94,6 +96,26 @@ def driver_func(length):
 
 hday_list=driver_func(days)
 print(hday_list)
-a=fitness_function(population,TimeSum,hday_list)
-print(a)
-    
+scored_population=fitness_function(population,TimeSum,hday_list)
+print(scored_population)
+sorted_scored_population = sorted(scored_population, key=lambda x: x[1])
+sorted_tuples = [arr.tolist()[0] for arr in sorted_scored_population]
+# sorted_dicts_with_scores = [(entry[0], entry[1]) for entry in sorted_scored_population]
+print(sorted_tuples)
+
+def crossover(parent1, parent2):
+    crossoverPoint=random.randint(1,len(parent1)-1)
+    offspring={}
+    for key in parent1.keys():
+        if key<crossoverPoint:
+            offspring[key]=parent1[key]
+        else:
+            offspring[key]=parent2[key]
+    return offspring
+
+def mutation(offspring, rate):
+    mutated_offspring=offspring.copy()
+    for key in mutated_offspring.keys():
+        if random.random<rate:
+            mutated_offspring[key]=(random.randrange(5,100,5))/10
+    return mutated_offspring
