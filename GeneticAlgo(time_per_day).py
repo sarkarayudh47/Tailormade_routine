@@ -25,7 +25,7 @@ def generatePopulation(days):
 def fitness_function(population,TimeSum,hday_list):
     score_multiplier = np.empty((len(population), 2), dtype=object)
     hday= list(hday_list.values())
-    print(hday)
+    # print(hday)
     # for member in population:
     #     memberTimeSum=0
     #     hour=[]
@@ -51,7 +51,7 @@ def fitness_function(population,TimeSum,hday_list):
             current_value = member_values[i]
             
             current_hday = hday[i]
-            print(current_hday)
+            # print(current_hday)
             if i+1<=(len(member_values)-1):
                 next_value = member_values[i + 1]
                 # print(f"Current value: {current_value}, Next value: {next_value}")
@@ -75,7 +75,7 @@ def fitness_function(population,TimeSum,hday_list):
         if score<0:
             score=0
         score_multiplier[index] = [member, score]
-        print("abc")
+        # print("abc")
     return score_multiplier
 
 TimeSum=0
@@ -83,8 +83,7 @@ population=[]
 population_number=8
 days=6
 # score_multiplier=np.empty((population_number,2),dtype=object)
-for i in range(0,population_number):
-    population.append(generatePopulation(days))
+
 # print(population)
 for i in range(1,5):
         lr=fetchOutput('notQvalue',i,'LR',False)
@@ -95,13 +94,25 @@ def driver_func(length):
     return my_dict
 
 hday_list=driver_func(days)
-print(hday_list)
+# print(hday_list)
+for i in range(0,population_number):
+    population.append(generatePopulation(days))
 scored_population=fitness_function(population,TimeSum,hday_list)
-print(scored_population)
-sorted_scored_population = sorted(scored_population, key=lambda x: x[1])
-sorted_tuples = [arr.tolist()[0] for arr in sorted_scored_population]
+# print(scored_population)
+sorted_scored_population = sorted(scored_population, key=lambda x: x[1], reverse=True)
+num_selected_parents=int(population_number*0.5)
+selected_parents=[]
+# print(f"sorted population is {sorted_scored_population}")
+# sorted_tuples = [arr.tolist()[0] for arr in sorted_scored_population]
 # sorted_dicts_with_scores = [(entry[0], entry[1]) for entry in sorted_scored_population]
-print(sorted_tuples)
+# print(sorted_tuples)
+# for index in range(num_selected_parents):
+#     if random.randint(0,6)==6:  
+#         individual=sorted_scored_population[random.randint(num_selected_parents,population_number-1)][0]
+#     else:
+#         individual = sorted_scored_population[index][0]
+#     selected_parents.append(individual)
+# print(f"the selected parents are {selected_parents}")
 
 def crossover(parent1, parent2):
     crossoverPoint=random.randint(1,len(parent1)-1)
@@ -116,6 +127,56 @@ def crossover(parent1, parent2):
 def mutation(offspring, rate):
     mutated_offspring=offspring.copy()
     for key in mutated_offspring.keys():
-        if random.random<rate:
+        if random.random()<rate:
             mutated_offspring[key]=(random.randrange(5,100,5))/10
     return mutated_offspring
+
+
+# for _ in range(population_number - len(selected_parents)):
+#         parent1, parent2 = random.sample(selected_parents, 2)
+#         offspring = crossover(parent1, parent2)
+#         # Mutation
+#         offspring = mutation(offspring, 0.1)
+#         next_generation.append(offspring)
+# # print(f"the next generation of parents \n{parent1} and \n{parent2} is \n{next_generation}")
+highest_score=0
+best_sol=0
+current_best=0
+for i in range(1000):
+    print(f"for iteration number {i}:\n\n")
+    scored_population=fitness_function(population,TimeSum,hday_list)
+    sorted_scored_population = sorted(scored_population, key=lambda x: x[1], reverse=True)
+    current_best=sorted_scored_population[0]
+    print(f"current member with highest score is {sorted_scored_population[0]}")
+    if highest_score<current_best[1]:
+        highest_score=current_best[1]
+        best_sol=current_best
+    # print(f"sorted population is \n{sorted_scored_population}")
+    num_selected_parents=int(population_number*0.5)
+    selected_parents=[]
+    for index in range(num_selected_parents):
+        # if random.randint(0,6)==6:  
+        #     a=random.randint(num_selected_parents,population_number-1)
+        #     print(f"random number is {a}")
+        #     individual=sorted_scored_population[a][0]
+        # else:
+        individual = sorted_scored_population[index][0]
+        selected_parents.append(individual)
+    # print(f"selected parents are \n{selected_parents}")
+    next_generation=[]
+    for _ in range(population_number - len(selected_parents)):
+        parent1, parent2 = random.sample(selected_parents, 2)
+        offspring = crossover(parent1, parent2)
+        offspring = mutation(offspring, 0.1)
+        # print(f"\nthe offspring of \n{parent1} and \n{parent2} is \n{offspring}")
+        next_generation.append(offspring)
+    # print(f"next generation is \n{next_generation}")
+    for i in range(days-len(selected_parents)):
+        next_generation.append(generatePopulation(days))
+    # print(f"the complete next generation is \n{next_generation}")
+    population=next_generation
+scored_population=fitness_function(population,TimeSum,hday_list)
+sorted_scored_population = sorted(scored_population, key=lambda x: x[1], reverse=True)
+print(f"best possible solution according to genetic algorithm is {sorted_scored_population[0]} with score of {sorted_scored_population[0][1]}")
+print(f"best possible solution period is {best_sol} with score of {highest_score}")
+        
