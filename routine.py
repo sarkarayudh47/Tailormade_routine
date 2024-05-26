@@ -129,9 +129,13 @@ def generate_timetable(Q, continous_limit, work_limit):
     timetable = {}
     work_action_index=0
     work_column = Q[:, work_action_index]
-    print(f"work_column is: \n{work_column}")
+    # print(f"work_column is: \n{work_column}")
     sorted_indices = np.argsort(work_column)[::-1]
-    print(f"sorted index is: \n{sorted_indices}")
+    sorted_indices = [20, 34, 44, 8, 25, 23, 19, 14, 12, 3, 28, 7, 40, 47, 9, 18, 41, 6, 4, 13, 16, 38, 2, 32, 36, 26, 11, 0, 35, 1, 30, 5, 43, 10, 45, 21, 42, 27, 31, 15, 22, 37, 33, 46, 24, 39, 29, 17]
+    # print(f"sorted_indices are \n{sorted_indices}")
+    # sorted_indices=np.zeros()
+    # sorted_indices[10]
+    # print(f"sorted index is: \n{sorted_indices}")
     for state in sorted_indices:
         if slotToKey[state] in timetable.keys():
             continue
@@ -145,7 +149,7 @@ def generate_timetable(Q, continous_limit, work_limit):
         additional = (continous_limit - 1) % 2
         start = max(state - num_to_convert, 0)
         end = min(state + num_to_convert + additional, 48)
-        print(start," ",end)
+        # print(start," ",end)
         for i in range(start, end+1):
             if slotToKey[i] not in timetable.keys():
                 if slotToKey[(i+1)%48] in timetable.keys() and timetable[slotToKey[(i+1)%48]] != 'work':
@@ -157,7 +161,7 @@ def generate_timetable(Q, continous_limit, work_limit):
                     work_limit-=1     
                     flag=1
                 else:
-                    timetable[slotToKey[i]] = 'Forced break'
+                    timetable[slotToKey[i]] = 'break'
             else:
                 print(timetable[slotToKey[i]])
         if flag==0:
@@ -168,9 +172,13 @@ def generate_timetable(Q, continous_limit, work_limit):
 
     
 Q = fetchOutput('Qvalue',None,None,None)
-t=generate_timetable(Q,3,10)
+t=generate_timetable(Q,3,6)
 
-for slot, task in t.items():
-        print(f"{slot}: {task}{keyToSlot[slot]}")
-        
+# for slot, task in t.items():
+#         print(f"{slot}: {task}{keyToSlot[slot]}")
+for key in slotToKey:
+    if key>14:
+        print(f"{slotToKey[key]}: {t[slotToKey[key]]}")
+    else:
+        print(f"{slotToKey[key]}: sleep")
         

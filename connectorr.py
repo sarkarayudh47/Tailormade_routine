@@ -33,6 +33,20 @@ def updateValue(mode,value,column,id):
                 db_cursor.execute(f"UPDATE Qtable SET {columnList[j]} = {element} where id={i+1}")
     mydb.commit()
 
+
+def updateWork_conc(work_conc):
+    # Convert numpy array to a Python list
+    for i in range(48):
+        element = work_conc[i]
+        query = "UPDATE work_concentration SET elements = %s WHERE id = %s"
+        db_cursor.execute(query, (element, i))
+    mydb.commit()
+
+# for i in range(0,48):
+#     n=0.0
+#     db_cursor.execute(f"insert into work_concentration (elements,id) values({n},{i}) ")
+# mydb.commit()
+
 def fetchOutput(mode,idValue, columnName, multipleSubjects):
     if mode=='notQvalue': 
         elapsedTime=0
@@ -54,11 +68,28 @@ def fetchOutput(mode,idValue, columnName, multipleSubjects):
         # numeric_row = [float(value) for value in row]  # Convert each value to float
         numeric_rows = [[float(value) for value in row] for row in rows] 
         numpy_array = np.array(numeric_rows)
-        print(numpy_array)
+        return (numpy_array)
 
+def fetchWorkConcentration():
+    query = "SELECT elements FROM work_concentration"
+    db_cursor.execute(query)
+    rows = db_cursor.fetchall()
+    
+    # Convert fetched rows into a list of floats
+    work_conc_list = [float(row[0]) for row in rows]
+    
+    # Convert the list to a NumPy array
+    work_conc_array = np.array(work_conc_list)
+    
+    return work_conc_array
+    
+    
 # Fetch the row
-
-#fetchOutput('notQvalue',None,None,None)
+# a=np.empty()
+# a=np.array([ 10.  7. 18.  0.  0. 24.  7. 10. 20.  0. 10. 18.  8.  0. 16.  0.  0. 18. 10. 10.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0. 0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.  0.])
+# a=[10.0, 7.0]
+# updateWork_conc(a)
+# print(a)
 # Close the cursor and connection
 
 # Convert the row into a numpy array

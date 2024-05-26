@@ -38,7 +38,7 @@ def learningRate(subject_id,obtained_marks,cutoff_marks,total_marks,first_exam,e
             print("this is the additional learning time "+str(Total_learning_Time))
     updateValue('notQvalue',Total_learning_Time,"TotalTiming",subject_id)
 
-learningRate(3,50,45,100,False,True)
+# learningRate(3,50,45,100,False,True)
 
 import datetime
 def dayName():
