@@ -14,7 +14,7 @@ def RunPeak_conc(maxIncreaseRate):
     midpoint = 5e5
     
 
-    Q = fetchOutput('Qvalue',None,None,None)
+    Q = fetchOutput('Qvalue',"tableName",None,None,None)
     print(f"the Q-table is: \n{Q}")
     work_concentration = fetchWorkConcentration()
     # print("work concentration")
@@ -113,7 +113,7 @@ def RunPeak_conc(maxIncreaseRate):
     # # Update timetable based on user input
     # update_timetable(start_time_input, end_time_input, reason_input)
 
-    updateValue("Qvalue", Q, "column", 2)
+    updateValue("Qvalue","tableName", Q, "column", 2)
     print(Q)
     print("Daily Timetable:")
     for slot, task in tt.items():
