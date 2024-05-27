@@ -83,8 +83,8 @@ def fitness_function(population,TimeSum,hday_list):
 TimeSum=0
 # print(population)
 for i in range(1,5):
-        lr=fetchOutput('notQvalue',i,'LR',False)
-        TimeSum+=fetchOutput('notQvalue',i,'AvgTime',False)*lr
+        lr=fetchOutput('notQvalue',"subdata",i,'LR',False)
+        TimeSum+=fetchOutput('notQvalue',"subdata",i,'AvgTime',False)*lr
 
 def driver_func(length):
     my_dict= dict([(i, random.randint(0,1)) for i in range(length)])
