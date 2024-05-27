@@ -15,19 +15,19 @@ mydb.autocommit=True
 # val_one=f"update subdata set LR={strval} where id=3"
 # db_cursor.execute(val_one)  # select Total Timing from subdata  (alter this while searchig for total time)
 
-def updateValue(mode,value,column,id):
+def updateValue(mode,tableName,value,column,id):
     if mode=='notQvalue':
         columnList=["MondayTimings","TuesdayTimings","WednesdayTimings","ThursdayTimings","FridayTimings","SaturdayTimings","SundayTimings"]
         if column not in columnList:
-            db_cursor.execute(f"update subdata set {column} = {value} where id = {id}")
+            db_cursor.execute(f"update {tableName} set {column} = {value} where id = {id}")
         else:
-            currentVal=fetchOutput(id,column,False)
-            updatedVal=currentVal+value
-            db_cursor.execute(f"update subdata set {column} = {updatedVal} where id = {id}")
+            currentVal=fetchOutput("notQvalue",tableName,id,column,False)
+            updatedVal=currentVal+value  #add total timing of reading for a day
+            db_cursor.execute(f"update {tableName} set {column} = {updatedVal} where id = {id}")
     elif mode=='Qvalue':
         for i in range (0,48):
             for j in range (0,3):
-                element=value[i,j]
+                element=value[i,j] # extraction of value of i,j th position
                 print(element)
                 columnList=["value1","value2","value3"]
                 db_cursor.execute(f"UPDATE Qtable SET {columnList[j]} = {element} where id={i+1}")
@@ -47,17 +47,17 @@ def updateWork_conc(work_conc):
 #     db_cursor.execute(f"insert into work_concentration (elements,id) values({n},{i}) ")
 # mydb.commit()
 
-def fetchOutput(mode,idValue, columnName, multipleSubjects):
+def fetchOutput(mode,tableName,idValue, columnName, multipleDays):
     if mode=='notQvalue': 
         elapsedTime=0
-        if not multipleSubjects:
-            db_cursor.execute(f"SELECT {columnName} FROM subdata where id={idValue}")
+        if not multipleDays:
+            db_cursor.execute(f"SELECT {columnName} FROM {tableName} where id={idValue}")
             fetchedOutput=db_cursor.fetchone()
             return fetchedOutput[0] 
         else:
             columnList=["MondayTimings","TuesdayTimings","WednesdayTimings","ThursdayTimings","FridayTimings","SaturdayTimings","SundayTimings"]
             for columnNameLoopVariable in columnList:
-                db_cursor.execute(f"SELECT {columnNameLoopVariable} FROM subdata where id={idValue}")
+                db_cursor.execute(f"SELECT {columnNameLoopVariable} FROM {tableName} where id={idValue}")
                 fetchedOutput=db_cursor.fetchone()
                 elapsedTime+=fetchedOutput[0]
         return elapsedTime
